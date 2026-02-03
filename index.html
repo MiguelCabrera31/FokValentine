@@ -155,7 +155,6 @@
             box-shadow: 
                 0 5px 25px rgba(106, 69, 132, 0.4),
                 inset 0 1px 0 rgba(255, 215, 0, 0.1);
-            position: absolute;
             transition: all 0.3s ease;
         }
 
@@ -236,6 +235,7 @@
 
     <script>
         let yesButtonScale = 1;
+        let noButtonMoved = false;
 
         const yesButton = document.getElementById('yesButton');
         const noButton = document.getElementById('noButton');
@@ -248,6 +248,12 @@
 
         // No button moves to random position on hover
         function moveButton() {
+            // Set position to absolute only when first moved
+            if (!noButtonMoved) {
+                noButton.style.position = 'absolute';
+                noButtonMoved = true;
+            }
+            
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             const buttonWidth = noButton.offsetWidth;
@@ -265,6 +271,12 @@
         }
 
         noButton.addEventListener('mouseenter', moveButton);
+        
+        // For touch devices - move on touchstart instead of click
+        noButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
 
         // Click yes button - go to success page
         yesButton.addEventListener('click', () => {
